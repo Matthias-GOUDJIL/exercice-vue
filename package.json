@@ -26,5 +26,6 @@
   ],
   "resolutions": {
     "ajv": "6.8.1"
-  }
+  },
+  "packageManager": "yarn@3.1.1"
 }
