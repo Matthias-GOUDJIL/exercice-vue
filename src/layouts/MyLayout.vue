@@ -15,6 +15,7 @@
         <q-toolbar-title>
           Prestashop Exercice
         </q-toolbar-title>
+         <q-btn @click="restoreInitialState" icon="restore_page" push color="white" text-color="primary" label="Restore initial state" />
       </q-toolbar>
     </q-header>
 
@@ -49,7 +50,11 @@ export default {
     };
   },
   methods: {
-    openURL
+    openURL,
+    restoreInitialState: () => {
+      localStorage.clear();
+      window.location.reload();
+    }
   }
 };
 </script>
