@@ -45,23 +45,45 @@
 
     <q-card-actions align="right">
       <q-btn label="Annuler" color="grey" v-close-popup />
-      <q-btn label="Sauver" color="primary" v-close-popup />
+      <q-btn label="Sauver" color="primary" @click="handleSubmit" />
     </q-card-actions>
   </q-card>
 </template>
 
 <script>
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+
 export default {
-  props: ["action"],
+  props: ["action", "disheData"],
   data() {
     return {
       dishe: {
-        name: "",
-        description: "",
-        note: 1,
-        image: ""
+        id: this.disheData.id,
+        name: this.disheData.name,
+        description: this.disheData.description,
+        note: this.disheData.note,
+        image: this.disheData.image
       }
     };
+  },
+
+  // computed: {
+  //   ...mapState({ closeFormDishe: "tasks/closeFormDish" })
+  // },
+
+  methods: {
+    ...mapActions("tasks", ["addDishe", "updateDishe"]),
+    // ...mapMutations("tasks", {
+    //   closeFormDishe: "CLOSE_FORM_DISHE"
+    // }),
+
+    handleSubmit() {
+      if(this.action == "ajouter"){
+        this.addDishe(this.dishe)
+      }else{
+        this.updateDishe(this.dishe);
+      }
+    }
   }
 };
 </script>

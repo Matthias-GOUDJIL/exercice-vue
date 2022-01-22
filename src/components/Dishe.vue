@@ -11,16 +11,16 @@
     <q-card-section>{{ dishe.description }}</q-card-section>
 
     <q-card-actions class="absolute-bottom" align="right">
-      <q-btn @click="showFormDishe = true" icon="edit" color="blue" flat>Modifier</q-btn>
+      <q-btn @click="showModifyFormDishe = true" icon="edit" color="blue" flat>Modifier</q-btn>
       <q-btn @click="showConfirmDelete = true" icon="delete" color="red" flat>Supprimer</q-btn>
     </q-card-actions>
 
-    <q-dialog v-model="showFormDishe">
-      <form-dishe action="modifier" />
+    <q-dialog v-model="showModifyFormDishe">
+      <form-dishe :disheData="dishe" action="modifier"/>
     </q-dialog>
 
     <q-dialog v-model="showConfirmDelete">
-      <confirm-delete action="supprimer" :id="dishe.id" />
+      <confirm-delete action="supprimer" :name="dishe.name" />
     </q-dialog>
   </q-card>
 </template>
@@ -30,10 +30,11 @@ export default {
   props: ["dishe"],
   data() {
     return {
-      showFormDishe: false,
+      showModifyFormDishe: false,
       showConfirmDelete: false
     };
   },
+
   components: {
     "form-dishe": require("components/FormDishe.vue").default,
     "confirm-delete": require("components/ConfirmDelete.vue").default,
