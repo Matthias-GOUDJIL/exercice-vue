@@ -16,7 +16,7 @@
         <q-btn
           label="Confirmer"
           color="primary"
-          @click="deleteDish()"
+          @click="deleteDishe(id)"
           v-close-popup
         />
       </q-card-actions>
@@ -25,21 +25,13 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   props: ["action", "id"],
 
-  data() {
-    return {};
-  },
-
   methods: {
-    ...mapMutations("tasks", { remove: "DELETE_DISHE" }),
-
-    deleteDish() {
-      this.remove(this.id);
-    }
+    ...mapActions("tasks", ["deleteDishe"]),
   }
 };
 </script>
