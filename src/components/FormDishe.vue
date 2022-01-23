@@ -6,7 +6,13 @@
 
     <q-card-section>
       <div class="row q-mb-md">
-        <q-input filled v-model="dishe.name" label="Nom (Burger)" class="col" />
+        <q-input
+          filled
+          v-model="dishe.name"
+          :placeholder="errors.name.required"
+          label="Nom (Burger)"
+          class="col"
+        />
       </div>
 
       <div class="row q-mb-md">
@@ -45,18 +51,35 @@
 
     <q-card-actions align="right">
       <q-btn label="Annuler" color="grey" v-close-popup />
-      <q-btn label="Sauver" color="primary" @click="handleSubmit" />
+      <q-btn
+        label="Sauver"
+        color="primary"
+        @click="checkForm"
+        v-close-popup="close"
+      />
     </q-card-actions>
   </q-card>
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   props: ["action", "disheData"],
   data() {
     return {
+      close: true,
+      notifyConfig: {
+        type: "warning",
+        position: "top",
+        color: "orange",
+        textColor: "white",
+        icon: "announcement",
+      },
+      errors: {
+        name: "",
+        description: ""
+      },
       dishe: {
         id: this.disheData.id,
         name: this.disheData.name,
@@ -67,22 +90,50 @@ export default {
     };
   },
 
-  // computed: {
-  //   ...mapState({ closeFormDishe: "tasks/closeFormDish" })
-  // },
-
   methods: {
     ...mapActions("tasks", ["addDishe", "updateDishe"]),
-    // ...mapMutations("tasks", {
-    //   closeFormDishe: "CLOSE_FORM_DISHE"
-    // }),
+
+    checkForm() {
+      this.close = true;
+      if (
+        this.dishe.name.length === 0 ||
+        this.dishe.name.length > 20 ||
+        this.dishe.description.length > 135
+      ) {
+        if (this.dishe.name.length === 0) {
+          this.errors.name = "le nom est obligatoire";
+          this.close = false;
+          this.$q.notify({
+            message: this.errors.name,
+            ...this.notifyConfig
+          });
+        }
+        if (this.dishe.name.length > 20) {
+          this.errors.name = "le nom ne doit pas dépasser 20 caractères";
+          this.close = false;
+          this.$q.notify({
+            message: this.errors.name,
+            ...this.notifyConfig
+          });
+        }
+        if (this.dishe.description.length > 135) {
+          this.errors.description =
+            "la description ne doit pas dépasser 135 caractères";
+          this.close = false;
+          this.$q.notify({
+            message: this.errors.description,
+            ...this.notifyConfig
+          });
+        }
+      } else {
+        this.handleSubmit();
+      }
+    },
 
     handleSubmit() {
-      if(this.action == "ajouter"){
-        this.addDishe(this.dishe)
-      }else{
-        this.updateDishe(this.dishe);
-      }
+      this.action === "ajouter"
+        ? this.addDishe(this.dishe)
+        : this.updateDishe(this.dishe);
     }
   }
 };

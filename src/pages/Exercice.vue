@@ -4,7 +4,7 @@
       <dishe v-for="dishe in dishes" :key="dishe.id" :dishe="dishe" />
 
       <add-button @click="showFormDishe = true" />
-      
+
       <q-dialog v-model="showFormDishe">
         <form-dishe :disheData="this.dishe" action="ajouter" />
       </q-dialog>
@@ -23,17 +23,11 @@ export default {
         id: "",
         name: "",
         description: "",
-        note: 1,
+        note: 0,
         image: ""
       }
     };
   },
-
-  // methods: {
-  //      ...mapMutations("tasks", {
-  //     openFormDishe: "OPEN_FORM_DISHE"
-  //   }),
-  // },
 
   computed: {
     ...mapGetters("tasks", { dishes: "getDishes" })

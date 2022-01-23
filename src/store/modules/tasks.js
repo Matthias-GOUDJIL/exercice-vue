@@ -36,15 +36,9 @@ const state = {
       note: 5
     }
   ],
-  // showFormDishe: false,
 };
 
 const getters = {
-
-  getShowFormDishe: state => {
-    return state.showFormDishe;
-  },
-
   getDishes: state => {
     if (!LocalStorage.getItem("store")) {
       LocalStorage.set("store", state.dishes);
@@ -55,47 +49,20 @@ const getters = {
 
 const actions = {
   addDishe: ({ commit }, payload) => {
-    if (payload.name) {
-      commit("ADD_DISHE", payload)
-      // commit("CLOSE_FORM_DISHE", payload)
-    } else {
-      Notify.create({
-        message: 'Le champ "nom" est requis',
-        color: "warning",
-        position: "top",
-        closeBtn: true,
-      })
-    }
+    commit("ADD_DISHE", payload)
   },
 
   updateDishe: ({ commit }, payload) => {
-    if (payload.name) {
-      commit("UPDATE_DISHE", payload)
-      // commit("CLOSE_FORM_DISHE", payload)
-    } else {
-      Notify.create({
-        message: 'Le champ "nom" est requis',
-        color: "warning",
-        position: "top",
-        closeBtn: true,
-      })
-    }
+    commit("UPDATE_DISHE", payload)
   }
 };
 
 const mutations = {
-  // OPEN_FORM_DISHE: (state) => {
-  //   state.showFormDishe = true
-  // },
-  // CLOSE_FORM_DISHE: (state) => {
-  //   state.showFormDishe = false
-  // },
-
   DELETE_DISHE: (state, payload) => {
     let i = 0
     const retrieveIndexOfDishe = () => {
       state.dishes.map((dishe) => {
-        if (payload === dishe.name) {
+        if (payload === dishe.id) {
           i = state.dishes.indexOf(dishe)
         }
       })
@@ -109,18 +76,18 @@ const mutations = {
     const lastDish = state.dishes[state.dishes.length - 1] || 1
     const newDishId = lastDish.id + 1 || 1
     payload.id = newDishId
+    payload.description === "" ? payload.description = "Aucune description fournie" : "";
+    payload.image === "" ? payload.image = "/statics/image-placeholder.png" : "";
     state.dishes.push(payload)
     LocalStorage.set("store", state.dishes)
   },
 
   UPDATE_DISHE: (state, payload) => {
     const index = state.dishes.findIndex(dishe => dishe.id === payload.id);
-    // console.log(payload.id)
-    // console.log(index)
     for (const dishe of state.dishes) {
       if (dishe.id === payload.id) {
         dishe.name = payload.name;
-        dishe.description = payload.description;
+        payload.description === "" ? dishe.description = "Aucune description fournie" : dishe.description = payload.description;
         dishe.note = payload.note;
         dishe.image = payload.image;
         break;

@@ -28,7 +28,7 @@
 import { mapMutations } from "vuex";
 
 export default {
-  props: ["action", "name"],
+  props: ["action", "id"],
 
   data() {
     return {};
@@ -38,7 +38,7 @@ export default {
     ...mapMutations("tasks", { remove: "DELETE_DISHE" }),
 
     deleteDish() {
-      this.remove(this.name);
+      this.remove(this.id);
     }
   }
 };
